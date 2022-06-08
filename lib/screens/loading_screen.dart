@@ -1,6 +1,9 @@
-import 'package:climatempo/model/weather_model.dart';
+import 'dart:async';
+
+import 'package:climatempo/models/weather_model.dart';
+import 'package:climatempo/screens/location_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:climatempo/services/location.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -8,35 +11,30 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  Location location = Location();
-  late Future<WeatherModel> futureWeather;
-
   @override
   void initState() {
     super.initState();
-    futureWeather = location.fetchCurrentPosition();
+    getLocationData();
+  }
+
+  Future<void> getLocationData() async {
+    var weatherData = await WeatherModel().getLocationWeather();
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(
+        locationWeather: weatherData,
+      );
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Fetch Weather Data Example'),
-        ),
         body: Center(
-          child: FutureBuilder<WeatherModel>(
-            future: futureWeather,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(
-                    '${snapshot.data?.city}, ${snapshot.data?.temperature}, ${snapshot.data?.condition}');
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
+          child: SpinKitChasingDots(
+            color: Colors.blue,
+            size: 100.0,
           ),
         ),
       ),

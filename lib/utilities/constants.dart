@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-const String kLocationServicesDisabledMessage = 'Location services are disabled.';
+const String kLocationServicesDisabledMessage =
+    'Location services are disabled.';
 const String kPermissionDeniedMessage = 'Permission denied.';
 const String kPermissionDeniedForeverMessage = 'Permission denied forever.';
 const String kPermissionGrantedMessage = 'Permission granted.';
-const String kAppId = 'e561e5d30307a21b9369d833da6322cc';
 
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
@@ -13,7 +13,7 @@ const kTempTextStyle = TextStyle(
 
 const kMessageTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
-  fontSize: 60.0,
+  fontSize: 40.0,
 );
 
 const kButtonTextStyle = TextStyle(
@@ -23,4 +23,23 @@ const kButtonTextStyle = TextStyle(
 
 const kConditionTextStyle = TextStyle(
   fontSize: 100.0,
+);
+
+const kTextFieldInputDecoration = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+  icon: Icon(
+    Icons.location_city,
+    color: Colors.white,
+  ),
+  hintText: 'Preencha o nome da cidade',
+  hintStyle: TextStyle(
+    color: Colors.grey,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
 );

@@ -1,20 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:climatempo/model/weather_model.dart';
-import 'package:climatempo/utilities/constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-
-import '../model/weather_model.dart';
 
 class Location {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
-  double? lat;
-  double? lon;
 
   void _registerPlatformInstance() {
     if (Platform.isAndroid) {
@@ -24,35 +15,7 @@ class Location {
     }
   }
 
-  Future<WeatherModel> fetchCurrentPosition() async {
-    final hasPermission = await _handlePermission();
-
-    if (!hasPermission) {
-      return Future.error('Location services are disabled.');
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
-
-    lat = position.latitude;
-    lon = position.longitude;
-
-    var url =
-        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$kAppId';
-    final response = await http.get(Uri.parse(url));
-
-    return fetchData(response);
-  }
-
-  Future<WeatherModel> fetchData(Response response) async {
-    if (response.statusCode == 200) {
-      return WeatherModel.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load weather.');
-    }
-  }
-
-  Future<bool> _handlePermission() async {
+  Future<bool> handlePermission() async {
     bool serviceEnabled;
     LocationPermission permission;
     _registerPlatformInstance();
